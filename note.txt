@@ -1,0 +1,82 @@
+-- tbl dokter
+kodedokter
+nik
+nama
+jeniskelamin
+Spesialisasi
+tglmasuk 
+
+dokter Ada 2
+
+
+-- tbl obat
+kodeobat
+namaobat
+kodesupplier
+signa
+ 
+--tbl suppller
+kodesupplier
+namasupplier
+
+--tbl jadwal
+kodejadwal
+hari
+jam
+anik
+
+--tbl user
+kodeuser
+namauser
+nikdokter
+kodepetugas
+password
+tglmasuk
+
+--tblpasien
+RmPasien - 8 angka
+namapasien
+jeniskelaminpendaftar
+tgllahirpendaftar
+noidentitas
+noantrian
+tgldaftar
+nohp
+penjamin -> pribadi
+alamat
+norekammediis
+
+--tblparmasi
+
+login petugas
+petugas isi 
+pendaftaran pasiern
+
+--dokter
+-pilih pendaftar
+-memilih obat
+-tampil signa
+-ketik diagnosa
+
+tabel diagnosa
+-
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
