@@ -1,12 +1,11 @@
 <?php
 header("Content-type:application/json");
 require '../../../config/koneksi.php';
-if($_GET['rmpasien'] == '')
-{
-    $sql = "SELECT * FROM pasien Order By rmpasien asc";
-}else{
-    $sql = "SELECT * FROM pasien where rmpasien = '". $_GET['rmpasien'] ."'";
-}
+ 
+$sql = "SELECT a.*, Status FROM kunjungan a left join pasien b 
+on a.rmpasien = b.rmpasien where a.rmpasien = '". $_GET['rmpasien'] ."' 
+order by tglkunjungan desc";
+ 
 $result = $mysqli->query($sql);
 while ($row = $result->fetch_assoc()) {
     $json[] = $row;

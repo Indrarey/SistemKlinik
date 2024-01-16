@@ -5,7 +5,7 @@ if($_GET['cekpasien'] == '')
 {
     $sql = "SELECT * FROM pasien Order By tgldaftar desc";
 }else{
-    $sql = "SELECT * FROM pasien where namalengkap like '%". $_GET['cekpasien'] ."%' or noidentitas  like '%". $_GET['cekpasien'] ."%' or tgllahirpasien like '%". $_GET['cekpasien'] ."%' or rmpasien like '%". $_GET['cekpasien'] ."%' or norekammedis like '%". $_GET['cekpasien'] ."%' ";
+    $sql = "SELECT * FROM pasien where namalengkap like '%". $_GET['cekpasien'] ."%' or noidentitas  like '%". $_GET['cekpasien'] ."%' or tgllahirpasien like '%". $_GET['cekpasien'] ."%' or rmpasien like '%". $_GET['cekpasien'] ."%' ";
 } 
 $result = $mysqli->query($sql);
 while ($row = $result->fetch_assoc()) {

@@ -3,9 +3,11 @@ header("Content-type:application/json");
 require '../../../config/koneksi.php';
 if($_GET['kodeobat'] == '')
 {
-    $sql = "SELECT * FROM obat Order By kodeobat asc";
+    $sql = "SELECT *, Keterangan Signa, NamaSupplier Supplier FROM obat a inner join signa b on a.idsigna = b.idsigna inner join supplier c 
+    on a.kodesupplier = c.kodesupplier Order By kodeobat asc";
 }else{
-    $sql = "SELECT * FROM obat where kodeobat = '". $_GET['kodeobat'] ."'";
+    $sql = "SELECT *, Keterangan Signa, NamaSupplier Supplier FROM obat a inner join signa b on a.idsigna = b.idsigna inner join supplier c 
+    on a.kodesupplier = c.kodesupplier where kodeobat = '". $_GET['kodeobat'] ."'"; 
 }
 $result = $mysqli->query($sql);
 while ($row = $result->fetch_assoc()) {

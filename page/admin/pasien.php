@@ -3,14 +3,14 @@
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">Data Pasien</h4>
-                  <a href="#" id="btnAdd" data-toggle="modal" data-target="#myModal"  class="btn btn-primary btn-sm">Add</a>
+                  <!-- <a href="#" id="btnAdd" data-toggle="modal" data-target="#myModal"  class="btn btn-primary btn-sm">Add</a> -->
 
                   <!-- <div class="table-responsive"> -->
-                    <table id="dtDokter" style="width:100%" class="table table-striped">
+                    <table id="dtPasien" style="width:100%" class="table table-striped">
                       <thead>
                         <tr>
                           <th>Action</th>
-                          <th>Kode Pasien</th>
+                          <th>Rm Pasien</th>
                           <th>Nama</th>
                           <th>Jenis Kelamin</th>
                           <th>No KTP</th>
@@ -33,10 +33,10 @@
                  $.ajax({
                     url: url + "page/admin/process/readpasien.php",
                     dataType: "json",
-                    data:{Kode Pasien:''}
+                    data:{rmpasien:''}
                 }).done(function (result) {
-                    $("#dtDokter").DataTable().clear();
-                    $("#dtDokter").DataTable().rows.add(result.data).draw(false);
+                    $("#dtPasien").DataTable().clear();
+                    $("#dtPasien").DataTable().rows.add(result.data).draw(false);
                  
                 }).fail(function (jqXHR, textStatus, errorThrown) { 
                     // needs to implement if it fails
@@ -48,19 +48,20 @@
           
             loadData();
 
-            $("#dtDokter").dataTable({
+            $("#dtPasien").dataTable({
                 bDestroy: true,
                 data: [],
                 columns: [
                     {
                         "data": "Action", class: "text-center", "render": function (data, type, row) {
-                                return '<sa> &nbsp; | &nbsp; <a href="#" class="text-danger" onclick="DeleteRecord(\'' + row.Kode Pasien + '\')"><i class="mdi mdi-eraser-variant"></i></a>'
+                                return '&nbsp; <a href="#" class="text-danger" onclick="DeleteRecord(\'' + row.RmPasien + '\')"><i class="mdi mdi-eraser-variant"></i></a>'
                         }
                     },
-                    { "data": "KodePasien", "autoWidth": true, class: "text-left" },
-                    { "data": "NamaPasien", "autoWidth": true, class: "text-left" },
-                    { "data": "NoKTP", "autoWidth": true, class: "text-left" },
-                    { "data": "Alamat", "autoWidth": true, class: "text-left" },
+                    { "data": "RmPasien", "autoWidth": true, class: "text-left" },
+                    { "data": "NamaLengkap", "autoWidth": true, class: "text-left" },
+                    { "data": "JenisKelaminPasien", "autoWidth": true, class: "text-left" },
+                    { "data": "NoIdentitas", "autoWidth": true, class: "text-left" },
+                    { "data": "AlamatPasien", "autoWidth": true, class: "text-left" },
                     { "data": "TglDaftar", "autoWidth": true, class: "text-center" }
 
                 ],
@@ -78,17 +79,15 @@
                 scrollX: "100%",
                 autoWidth: true,
             });
-
-        ]
             
         });
         
-        function DeleteRecord(Kode Pasien){
+        function DeleteRecord(RmPasien){
             $.ajax({
                 dataType: 'json',
                 type:'POST',
                 url: url + "page/admin/process/deletepasien.php", 
-                data:{Kode Pasien:Kode Pasien}
+                data:{rmpasien:RmPasien}
             }).done(function(data){
                 loadData();
                 alert('Data berhasil dihapus')

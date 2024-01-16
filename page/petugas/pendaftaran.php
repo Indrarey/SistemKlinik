@@ -26,15 +26,13 @@
                         <thead>
                             <tr>
                             <th>Action</th>
-                            <th>Rm Pasien</th>
+                            <th>No Rm Pasien</th>
                             <th>Nama</th>
                             <th>No Identitas</th>
                             <th>Jenis Kelamin</th>
                             <th>No HP</th>
-                            <th>Alamat</th>
-                            <th>No Rekam Medis</th>
+                            <th>Alamat</th> 
                             <th>Tgl Lahir</th>
-                            <th>No Antrian</th>
                             <th>Tgl Daftar</th>
                             </tr>
                         </thead>
@@ -58,11 +56,7 @@
                         <form class="forms-sample" id="formInput">
                             <div class="card">
                                 <div class="card-body">
-                                    <button type="button" class="btn btn-primary btn-sm" id="btnInput">Input</button>
-                                    <div class="form-group">
-                                        <label for="txtNoAntrian">No Antrian</label>
-                                        <input type="text" required class="form-control" id="txtNoAntrian"  name="txtNoAntrian"  placeholder="No Antrian" maxlength="10">
-                                    </div>
+                                    <!-- <button type="button" class="btn btn-primary btn-sm" id="btnInput">Input</button> -->
                                     <div class="form-group">
                                         <label for="txtNama">Nama</label>
                                         <input type="text" required class="form-control" id="txtNama"  name="txtNama"  placeholder="Nama Lengkap" maxlength="70">
@@ -82,15 +76,7 @@
                                     <div class="form-group">
                                         <label for="txtNoKTP">No KTP</label>
                                         <input type="text" class="form-control" id="txtNoKTP" name="txtNoKTP" placeholder="No KTP" maxlength="20">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="txtPenjamin">Penjamin</label>
-                                        <input type="text" class="form-control" id="txtPenjamin" name="txtPenjamin" value="Umum"  placeholder="Penjamin" maxlength="20">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="txtNoRekamMedis">No Rekam Medis</label>
-                                        <input type="text" class="form-control" id="txtNoRekamMedis" name="txtNoRekamMedis" placeholder="No Rekam Medis" maxlength="30">
-                                    </div>
+                                    </div> 
                                     <div class="form-group">
                                     <label for="txtTglLahir">Tgl Lahir</label>
                                         <input type="text"  class="form-control" id="txtTglLahir" name="txtTglLahir" placeholder="Tgl Lahir" maxlength="10">
@@ -126,14 +112,13 @@
                         <div class="row container">
                             <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label for="txtNoRekamKunjungan">No Rekam Medis</label>
-                                        <input type="text" class="form-control" id="txtNoRekamKunjungan" name="txtNoRekamKunjungan" readonly>
+                                        <label for="txtRmPasienKunjungan">No Rm Pasien</label>
+                                        <input type="text" class="form-control" id="txtRmPasienKunjungan" name="c" readonly>
                                     </div>
                                     <div class="form-group">
                                         <label for="txtNamaKunjungan">Nama Pasien</label>
                                         <input type="text" class="form-control" id="txtNamaKunjungan" name="txtNamaKunjungan" readonly>
                                     </div>
-
                             </div>
                             <div class="col-sm-4">
                                     <div class="form-group">
@@ -166,6 +151,7 @@
                             <div class="row container">
                                 <div class="col-sm-12">
                                     <button type="button" class="btn btn-primary btn-sm" id="btnInputKunjungan" >Input Kunjungan</button>
+                                    <button type="button" class="btn btn-success btn-sm" id="btnCetakKartu" >Cetak Kartu Pasien</button>
                                 </div>
                             </div>
                             <div class="row container">
@@ -177,6 +163,7 @@
                                             <th>Tgl Kunjungan</th>
                                             <th>No Antrian</th>
                                             <th>Penjamin</th>
+                                            <th>Status</th>
                                             </tr>
                                         </thead>
                                     <tbody></tbody>
@@ -186,7 +173,7 @@
                         </div>
 
                         <div id="InputKunjungan">
-                            <form class="forms-sample" id="formInput">
+                            <form class="forms-sample" id="formInputKunjungan">
                                 <div class="row container">
                                     <div class="col-sm-4">
                                             <div class="form-group">
@@ -204,7 +191,7 @@
                                         <div class="form-group">
                                                 <label for="txtPenjaminKunjungan">Penjamin</label>
                                                 <select class="form-control" name="txtPenjaminKunjungan" id="txtPenjaminKunjungan">
-                                                    <option value="umum" selected>Umum</option>
+                                                    <option value="Umum" selected>Umum</option>
                                                 </select> 
                                             </div> 
                                     </div>
@@ -212,7 +199,7 @@
                                 
                                 <div class="row container">
                                     <div class="col-sm-4">
-                                        <button type="submit" class="btn btn-primary btn-sm" id="btnSaveKunjungan">Save</button>
+                                        <button type="button" class="btn btn-primary btn-sm" id="btnSaveKunjungan">Save</button>
                                         <button type="button" class="btn btn-danger btn-sm" id="btnBackKunjungan">Back</button>
                                     </div>
                                 </div>
@@ -281,6 +268,10 @@
             }
         $(document).ready(function() {
 
+            $("#btnCetakKartu").click(function(e){
+                
+                window.open('page/petugas/cetakkartu.php','_blank');
+            });
 
             loadData('');
 
@@ -299,9 +290,7 @@
                     { "data": "JenisKelaminPasien", "autoWidth": true, class: "text-left" },
                     { "data": "NoHP", "autoWidth": true, class: "text-left" },
                     { "data": "AlamatPasien", "autoWidth": true, class: "text-left" },
-                    { "data": "NoRekamMedis", "autoWidth": true, class: "text-left" },
-                    { "data": "TglLahirPasien", "autoWidth": true, class: "text-left" },
-                    { "data": "NoAntrian", "autoWidth": true, class: "text-left" },
+                    { "data": "TglLahirPasien", "autoWidth": true, class: "text-left" }, 
                     { "data": "TglDaftar", "autoWidth": true, class: "text-center" }
 
                 ],
@@ -347,13 +336,16 @@
 
              });
 
-            function validasi(){
-               if($('#txtNoAntrian').val() == ''){
-                    alert('No Antrian harus diisi');
-                    $('#txtNoAntrian').focus();
-                    return;
-                }
+            function validasi(){ 
 
+                
+
+
+            }
+
+            $("#btnSave").click(function(e){
+                e.preventDefault();
+               
                 if($('#txtNama').val() == ''){
                     alert('Nama harus diisi');
                     $('#txtNama').focus();
@@ -391,23 +383,13 @@
                     return;
                 }
 
-
-            }
-
-            $("#btnSave").click(function(e){
-                e.preventDefault();
-                validasi();
-
                 var model = new Object();
-                model.noantrian = $('#txtNoAntrian').val();
                 model.nama = $('#txtNama').val();
                 model.jeniskelamin = $('#selJenisKelamin').val();
                 model.nohp = $('#txtNoHP').val();
                 model.noktp = $('#txtNoKTP').val();
-                model.penjamin = $('#txtPenjamin').val();
                 model.tgllahir = $('#txtTglLahir').val();
-                model.alamat = $('#txtAlamat').val();
-                model.norekammedis = $('#txtNoRekamMedis').val();
+                model.alamat = $('#txtAlamat').val(); 
 
                 $.ajax({
                     type: "POST",
@@ -421,7 +403,7 @@
                             $('#txtNama').focus()
                         }
                         else {
-                            loadData();
+                            loadData($("#txtCekPasien").val());
                             alert('Data Saved Successfully !');
                             $('#myModal').modal('hide');
                             $('body').removeClass('modal-open');
@@ -482,12 +464,13 @@
                 columns: [
                     {
                         "data": "Action", class: "text-center", "render": function (data, type, row) {
-                                return '<a href="#" class="text-primary" onclick="EditRecordJadwal(\'' + row.KodeJadwal + '\')"><i class="mdi mdi-lead-pencil"></i></a> &nbsp; | &nbsp; <a href="#" class="text-danger" onclick="DeleteRecordJadwal(\'' + row.KodeJadwal + '\')"><i class="mdi mdi-eraser-variant"></i></a>'
+                                return '<a href="#" class="text-primary" onclick="EditRecordKunjungan(\'' + row.IdKunjungan + '\')"><i class="mdi mdi-lead-pencil"></i></a> &nbsp;'
                         }
                     },
-                    { "data": "TglObservasi", "autoWidth": true, class: "text-left" },
-                    { "data": "No Antrian", "autoWidth": true, class: "text-center" },
+                    { "data": "TglKunjungan", "autoWidth": true, class: "text-left" },
+                    { "data": "NoAntrian", "autoWidth": true, class: "text-center" },
                     { "data": "Penjamin", "autoWidth": true, class: "text-center" },
+                    { "data": "Status", "autoWidth": true, class: "text-center" },
                     // { "data": "Dokter Check Up", "autoWidth": true, class: "text-center" }
 
                 ],
@@ -523,14 +506,29 @@
              });
 
              $("#btnSaveKunjungan").click(function(e){
-                e.preventDefault();
-                validasiKunjungan();
+                e.preventDefault(); 
+                if($('#txtTglKunjungan').val() == ''){
+                    alert('Tgl Kunjungan harus diisi');
+                    $('#txtTglKunjungan').focus();
+                    return;
+                }
 
+               if($('#txtNoAntrianKunjungan').val() == ''){
+                    alert('No Antrian harus diisi');
+                    $('#txtNoAntrianKunjungan').focus();
+                    return;
+                }
+
+                if($('#txtPenjaminKunjungan').val() == ''){
+                    alert('Penjamin harus diisi');
+                    $('#txtPenjaminKunjungan').focus();
+                    return;
+                }
                 var model = new Object();
                 model.rmpasien = $('#txtRmPasienKunjungan').val();
                 model.tglkunjungan = $('#txtTglKunjungan').val();
-                model.noantrian = $('#txtNoAntrian').val();
-                model.penjamin = $('#txtPenjamin').val();
+                model.noantrian = $('#txtNoAntrianKunjungan').val();
+                model.penjamin = $('#txtPenjaminKunjungan').val();
                 
                 $.ajax({
                     type: "POST",
@@ -544,7 +542,7 @@
                             $('#txtTglKunjungan').focus()
                         }
                         else {
-                            loadDataKunjungan($('#txtRmKunjungan').val());
+                            loadDataKunjungan($('#txtRmPasienKunjungan').val());
                             alert('Data Saved Successfully !');
                             $('#DataKunjungan').show();
                             $('#InputKunjungan').hide();
@@ -560,8 +558,24 @@
             });
 
             $("#btnUpdateJadwal").click(function(e){
-                e.preventDefault();
-                validasiKunjungan();
+                e.preventDefault(); 
+                if($('#txtTglKunjungan').val() == ''){
+                    alert('Tgl Kunjungan harus diisi');
+                    $('#txtTglKunjungan').focus();
+                    return;
+                }
+
+               if($('#txtNoAntrianKunjungan').val() == ''){
+                    alert('No Antrian harus diisi');
+                    $('#txtNoAntrianKunjungan').focus();
+                    return;
+                }
+
+                if($('#txtPenjaminKunjungan').val() == ''){
+                    alert('Penjamin harus diisi');
+                    $('#txtPenjaminKunjungan').focus();
+                    return;
+                }
 
                 var model = new Object();
                 model.nik = $('#txtNIKJadwal').val();
@@ -595,33 +609,14 @@
 
 
             });
-
-            function validasiKunjungan(){
-                if($('#txtTglKunjungan').val() == ''){
-                    alert('Tgl Kunjungan harus diisi');
-                    $('#txtTglKunjungan').focus();
-                    return;
-                }
-
-               if($('#txtNoAntrianKunjungan').val() == ''){
-                    alert('No Antrian harus diisi');
-                    $('#txtNoAntrianKunjungan').focus();
-                    return;
-                }
-
-                if($('#txtPenjaminKunjungan').val() == ''){
-                    alert('Penjamin harus diisi');
-                    $('#txtPenjaminKunjungan').focus();
-                    return;
-                }
-
-            }
+ 
 
         });
 
         function clearData(){
             $('#txtNoAntrian').val('');
             $('#txtNama').val('');
+            $('#txtNoHP').val('');
             $('#selJenisKelamin').val('');
             $('#txtAlamat').val('');
             $('#txtTglLahir').val('');
@@ -644,7 +639,7 @@
 
                         var obj =  data.data[0];
 
-                        $("#txtNoRekamKunjungan").val(obj.NoRekamMedis);
+                        $("#txtRmPasienKunjungan").val(obj.RmPasien);
                         $("#txtNamaKunjungan").val(obj.NamaLengkap);
                         $("#txtAlamatKunjungan").val(obj.AlamatPasien).prop("disable", true);
                         $("#txtTglLahirKunjungan").val(obj.TglLahirPasien);
@@ -656,6 +651,9 @@
                         console.log(xhr.responseText)
                     }
                 })
+
+
+            loadDataKunjungan(rmPasien);
         }
 
         function DeleteRecord(nik){
@@ -699,6 +697,16 @@
                 })
 
         }
+        
+        function EditRecordKunjungan(kodekunjungan){
+            clearData();
+            btnSaveKunjungan
+            $("#btnSaveKunjungan").hide();
+            $("#btnUpdateJadwal").show();
+            $("#ViewTblJadwal").hide();
+            $("#ViewInputJadwal").show();
+        }
+
 
         function EditRecordJadwal(kodejadwal) {
             clearData();
@@ -729,26 +737,27 @@
 
         }
 
-        function ViewJadwal(nik) {
-            $("#myModalJadwal").modal();
-            $("#titelModalJadwal").html('Jadwal Dokter');
-            $("#ViewTblJadwal").show();
-            $("#ViewInputJadwal").hide();
-            $("#txtNIKJadwal").val(nik);
-            loadDataJadwal(nik);
-        }
+        // function ViewJadwal(nik) {
+        //     $("#myModalJadwal").modal();
+        //     $("#titelModalJadwal").html('Jadwal Dokter');
+        //     $("#ViewTblJadwal").show();
+        //     $("#ViewInputJadwal").hide();
+        //     $("#txtNIKJadwal").val(nik);
+        //     loadDataJadwal(nik);
+        // }
 
-            function loadDataJadwal(nik) {
+            function loadDataKunjungan(rmpasien) {
                  $.ajax({
-                    url: url + "page/admin/process/readjadwal.php",
+                    url: url + "page/petugas/process/readkunjungan.php",
                     dataType: "json",
-                    data:({nik:nik}),
+                    data:({rmpasien:rmpasien}),
                     success: function (result) {
-                        $("#dtJadwalDokter").DataTable().clear().draw();
-                        $("#dtJadwalDokter").DataTable().rows.add(result.data).draw(false);
+                        debugger;
+                        $("#dtKunjungan").DataTable().clear().draw();
+                        $("#dtKunjungan").DataTable().rows.add(result.data).draw(false);
                     },
                     error: function (xhr){
-                        $("#dtJadwalDokter").DataTable().clear().draw();
+                        $("#dtKunjungan").DataTable().clear().draw();
                     }
                 });
             }
@@ -759,15 +768,5 @@
                 $('#txtNoAntrianKunjungan').val(''); 
             }
 
-            function DeleteRecordJadwal(kodejadwal){
-            $.ajax({
-                dataType: 'json',
-                type:'POST',
-                url: url + "page/admin/process/deletejadwal.php",
-                data:{kodejadwal:kodejadwal}
-            }).done(function(data){
-                loadDataJadwal($("#txtNIKJadwal"));
-                alert('Data berhasil dihapus')
-            });
-        }
+            
     </script>

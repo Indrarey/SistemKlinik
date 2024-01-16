@@ -1,12 +1,18 @@
 <?php
+  session_start();
+  error_reporting(0);
   $baseUrl = "http://localhost:8080/sistemklinik/";
+  if (!isset($_SESSION['userkode'])) {
+    header("Location:" . $baseUrl ."login.php"); 
+    die();
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <!-- Required meta tags -->
-  <meta charset="utf-8">
+  <meta charse                                                                                                                                                                                                                                                                 t="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Sistem Klinik</title>
   <!-- plugins:css -->
@@ -61,7 +67,7 @@
           <li class="nav-item dropdown">
             <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
               <i class="icon-bell mx-0"></i>
-              <span class="count"></span>
+              <span class="count" id="countPasien"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
               <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
@@ -108,14 +114,17 @@
           </li>
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-              <img src="assets/images/faces/face28.jpg" alt="profile"/>
+              <!-- <img src="assets/images/faces/face28.jpg" alt="profile"/> -->
+              <h3 style="margin-top:10px">
+                <i class="mdi mdi-account" style="width:100px"></i>
+              </h3>
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-              <a class="dropdown-item">
+              <!-- <a class="dropdown-item">
                 <i class="ti-settings text-primary"></i>
                 Settings
-              </a>
-              <a class="dropdown-item">
+              </a> -->
+              <a class="dropdown-item" id="btnLogOut">
                 <i class="ti-power-off text-primary"></i>
                 Logout
               </a>
@@ -139,14 +148,14 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="/">
+            <a class="nav-link" href="index.php">
               <i class="icon-grid menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
           <li class="nav-item" >
             <a class="nav-link" id="menuMaster" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-              <i class="icon-layout menu-icon"></i>
+              <i class="mdi mdi-cube "></i>
               <span class="menu-title">Master</span>
               <i class="menu-arrow"></i>
             </a>
@@ -160,9 +169,21 @@
                 </li>
                 <li class="nav-item"  id="menuPasien"> 
                   <a class="nav-link" href="?page=pasien">Pasien</a>
+                </li>                
+                <li class="nav-item" id="menuSupplier"> 
+                  <a class="nav-link" href="?page=supplier">Supplier</a>
+                </li>
+                <li class="nav-item" id="menuSigna"> 
+                  <a class="nav-link" href="?page=signa">Signa</a>
                 </li>
                 <li class="nav-item" id="menuObat"> 
                   <a class="nav-link" href="?page=obat">Obat</a>
+                </li>
+                <li class="nav-item" id="menuTindakan"> 
+                  <a class="nav-link" href="?page=tindakan">Tindakan</a>
+                </li>
+                <li class="nav-item" id="menuUser"> 
+                  <a class="nav-link" href="?page=user">User</a>
                 </li>
               </ul>
             </div>
@@ -170,7 +191,7 @@
           <!-- petugas kasir -->
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
-              <i class="icon-columns menu-icon"></i>
+              <i class="mdi mdi-account-plus"></i>
               <span class="menu-title">Pendaftaran</span>
               <i class="menu-arrow"></i>
             </a>
@@ -180,73 +201,33 @@
               </ul>
             </div>
           </li>
+           
           <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
-              <i class="icon-bar-graph menu-icon"></i>
-              <span class="menu-title">Charts</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="charts">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/charts/chartjs.html">ChartJs</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
+             <span class="count-indicator-info btn-danger" id="countInfo" ></span>
+           
             <a class="nav-link" data-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
-              <i class="icon-grid-2 menu-icon"></i>
-              <span class="menu-title">Tables</span>
+              <i class="mdi mdi-pharmacy"></i>
+              <span class="menu-title">Rekam Medis</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="tables">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/tables/basic-table.html">Basic table</a></li>
+                <li class="nav-item"> <a class="nav-link" href="?page=kunjunganpasien">Kunjungan Pasien</a></li>
               </ul>
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
-              <i class="icon-contract menu-icon"></i>
-              <span class="menu-title">Icons</span>
+             <span class="count-indicator-info btn-danger" id="countInfoPembayaran" ></span>
+            <a class="nav-link" data-toggle="collapse" href="#pembayaran" aria-expanded="false" aria-controls="icons">
+              <i class="mdi mdi-cash-multiple"></i>
+              <span class="menu-title">Pembayaran</span>
               <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="icons">
+            <div class="collapse" id="pembayaran">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/icons/mdi.html">Mdi icons</a></li>
+                <li class="nav-item"> <a class="nav-link" href="?page=pembayaran">Pembayaran</a></li>
               </ul>
             </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-              <i class="icon-head menu-icon"></i>
-              <span class="menu-title">User Pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="auth">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
-              <i class="icon-ban menu-icon"></i>
-              <span class="menu-title">Error pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="error">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="pages/documentation/documentation.html">
-              <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Documentation</span>
-            </a>
           </li>
         </ul>
       </nav>
@@ -266,8 +247,47 @@
     </div>   
     <!-- page-body-wrapper ends -->
   </div>
+  <style>
+     .sidebar-icon-only .sidebar .nav .nav-item .nav-link {
+        display: block;
+        padding-left: 1.2rem;
+        padding-right: 1.2rem;
+        text-align: center;
+        position: static;
+    }
+    .navbar .navbar-menu-wrapper .navbar-nav .nav-item.dropdown .count-indicator .count {
+        position: absolute;
+        left: 36%;
+        width: 100%;
+        height: 20px;
+        border-radius: 100%;
+        background: #4B49AC;
+        top: 1px;
+        color: white;
+        padding: 1px;
+        font-size: 8px;
+        border: 1px solid #ffffff;
+    }
+
+    .count-indicator-info {
+      position: absolute;
+      left: 70%;
+      width: 22px;
+      height: 22px;
+      border-radius: 100%; 
+      top: 1px;
+      color: white;
+      padding-left: 7px;
+      padding-top: 1px;
+      font-size: 10px;
+      border: 1px solid #ffffff;
+      z-index: 999;
+    }
+  </style>
   <script>
     $(document).ready(function(){
+      var baseurl = 'http://localhost:8080/sistemklinik/';
+      
       var currentPage = document.location.search;
       $("#menuMaster").attr("aria-expanded", "false");
       $("#ui-basic").attr("class", "collapse");
@@ -278,6 +298,99 @@
         $("#menuMaster").attr("class", "nav-link");
         $("#ui-basic").attr("class", "collapse show");
       }
+
+      $("#btnLogOut").click(function(e){
+                $.ajax({
+                    type: "POST",
+                    url: baseurl + "process/logout.php",  
+                    dataType: "json",
+                    success: function (message) {
+                        debugger;
+                        if (message != "success") {
+                            alert(message);
+                        }
+                        else {
+                           window.location.href = baseurl + 'login.php';
+                        }
+
+                    },
+                    error: function (xhr, data) {
+                        console.log(xhr.responseText);
+                    }
+                })            
+         
+      });
+                function loadPasien(){
+                  $.ajax({
+                    type: "GET",
+                    url: baseurl + "process/cekperiksapasien.php",  
+                    dataType: "json",
+                    success: function (data) { 
+                        var obj =  data.data[0];
+                        $("#countPasien").empty();
+                        $("#countInfo").empty();
+                        if(obj.JumlahPasien == 0){
+                          $("#notificationDropdown").hide();
+                          $("#countInfo").hide();
+                          
+                        }else{
+                          $("#notificationDropdown").show();
+                          $("#countInfo").show();
+                          $("#countPasien").append(obj.JumlahPasien);
+                          $("#countInfo").append(obj.JumlahPasien);
+                        }
+
+                    },
+                    error: function (xhr, data) {
+                        console.log(xhr.responseText);
+                    }
+                  })
+                }
+
+                function loadPembayaranPasien(){
+                  $.ajax({
+                    type: "GET",
+                    url: baseurl + "process/cekperiksapasien.php",  
+                    dataType: "json",
+                    success: function (data) { 
+                        var obj =  data.data[0]; 
+                        $("#countInfoPembayaran").empty();
+                        if(obj.JumlahPasienPembayaran == 0){ 
+                          $("#countInfoPembayaran").hide();
+                          
+                        }else{ 
+                          $("#countInfoPembayaran").show(); 
+                          $("#countInfoPembayaran").append(obj.JumlahPasienPembayaran);
+                        }
+
+                    },
+                    error: function (xhr, data) {
+                        console.log(xhr.responseText);
+                    }
+                  })
+                }
+
+                $("#countInfo").hide();
+                $("#countInfoPembayaran").hide();
+                
+                if('<?= $_SESSION['jabatan']?>' == 'Dokter'){ 
+                  loadPasien(); 
+                }
+
+                if('<?= $_SESSION['jabatan']?>' == 'Petugas'){ 
+                  loadPembayaranPasien(); 
+                }
+                
+          setInterval(function() {
+
+            if('<?= $_SESSION['jabatan']?>' == 'Dokter'){ 
+               loadPasien();  
+            }
+
+            if('<?= $_SESSION['jabatan']?>' == 'Petugas'){ 
+                  loadPembayaranPasien(); 
+            }
+          }, 2000);
 
     })
   </script>
@@ -302,7 +415,7 @@
   <script src="assets/js/todolist.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->
-  <script src="assets/js/dashboard.js"></script>
+  <script src="assetss/js/dashboard.js"></script>
   <script src="assets/js/Chart.roundedBarCharts.js"></script>
   <!-- End custom js for this page-->
 </body>

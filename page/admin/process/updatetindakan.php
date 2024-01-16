@@ -2,9 +2,7 @@
 header("Content-type:application/json");
 require '../../../config/koneksi.php';
 
-$tgl = explode("/", $_POST['tglmasuk']); 
-$tglmasuk =  $tgl[2] ."-".$tgl[1]."-".$tgl[0];
-$sql = "UPDATE petugas SET nama = '" . $_POST['nama'] . "', jeniskelamin = '" . $_POST['jeniskelamin'] . "', tglmasuk = '" . $tglmasuk . "' WHERE nikpetugas = '" . $_POST['nikpetugas'] . "'";
+$sql = "UPDATE tindakan SET keterangan = '" . $_POST['keterangan'] . "', harga = '" . $_POST['harga'] . "' WHERE idtindakan = '" . $_POST['idtindakan'] . "'";
 // $result = $mysqli->query($sql); 
 if (!$mysqli -> query($sql)){
     $data = "Error description: " . $mysqli -> error;

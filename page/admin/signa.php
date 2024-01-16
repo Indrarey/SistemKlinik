@@ -2,18 +2,15 @@
         <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Data Petugas</h4>
+                  <h4 class="card-title">Data Signa</h4>
                   <a href="#" id="btnAdd" data-toggle="modal" data-target="#myModal"  class="btn btn-primary btn-sm">Add</a>
 
                   <!-- <div class="table-responsive"> -->
-                    <table id="dtpetugas" style="width:100%" class="table table-striped">
+                    <table id="dtSigna" style="width:100%" class="table table-striped">
                       <thead>
                         <tr>
                           <th>Action</th>
-                          <th>NIK</th>
-                          <th>Nama</th>
-                          <th>Jenis Kelamin</th> 
-                          <th>Tgl Masuk</th>
+                          <th>Keterangan</th> 
                         </tr>
                       </thead>
                       <tbody></tbody>
@@ -37,26 +34,10 @@
                             <div class="card">
                                 <div class="card-body">
                                 <button type="button" class="btn btn-primary btn-sm" id="btnInput">Input</button>
-
                                     <div class="form-group">
-                                        <label for="txtNIKPetugas">NIK</label>
-                                        <input type="text" required class="form-control" id="txtNIKPetugas" name="txtNIKPetugas" placeholder="NIK Petugas" maxlength="20">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="txtNama">Nama</label>
-                                        <input type="text" required class="form-control" id="txtNama"  name="txtNama"  placeholder="Nama Lengkap" maxlength="70">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="selJenisKelamin">Jenis Kelamin</label>
-                                        <select class="form-control" required  name="selJenisKelamin" id="selJenisKelamin">
-                                            <option value="">Pilih</option>
-                                            <option value="Laki-Laki">Laki-Laki</option>
-                                            <option value="Perempuan">Perempuan</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                    <label for="txtTglMasuk">Tgl Masuk</label>
-                                        <input type="text" required  class="form-control" id="txtTglMasuk" name="txtTglMasuk" placeholder="Tgl Masuk" maxlength="10">
+                                        <label for="txtKeterangan">Keterangan</label>
+                                        <input type="hidden" required class="form-control" id="txtIdSigna"  name="txtIdSigna">
+                                        <input type="text" required class="form-control" id="txtKeterangan"  name="txtKeterangan"  placeholder="Nama Lengkap" maxlength="70">
                                     </div>
                                     <div class="form-group text-right">
                                         <button type="submit" class="btn btn-primary btn-sm" id="btnSave">Save</button>
@@ -89,7 +70,6 @@
 
         .form-group label {
             font-size: 0.875rem;
-            /* line-height: 1.4rem; */
             vertical-align: top;
             margin-bottom: 0px;
         }
@@ -99,46 +79,51 @@
             margin-bottom: 3px;
         }
     </style>
-    <script>
-        $('#txtTglMasuk').datepicker({
-            dateFormat: 'dd/mm/yy'
-        });
-    
+    <script>    
         var url = "<?= $baseUrl ?>";
       
         function loadData() {
                  $.ajax({
-                    url: url + "page/admin/process/readpetugas.php",
-                    dataType: "json",
-                    data:{nikpetugas:''}
+                    url: url + "page/admin/process/readsigna.php",
+                    dataType: "json", 
+                    data: ({ idsigna: '' }),
                 }).done(function (result) {
-                    $("#dtpetugas").DataTable().clear();
-                    $("#dtpetugas").DataTable().rows.add(result.data).draw(false);
+                    $("#dtSigna").DataTable().clear();
+                    $("#dtSigna").DataTable().rows.add(result.data).draw(false);
                  
                 }).fail(function (jqXHR, textStatus, errorThrown) { 
                     // needs to implement if it fails
                     console.log(jqXHR);
                 });
             }
-        $(document).ready(function() {
+            function DeleteRecord(idsigna){
+            $.ajax({
+                dataType: 'json',
+                type:'POST',
+                url: url + "page/admin/process/deletesigna.php", 
+                data:{idsigna:idsigna}
+            }).done(function(data){
+                loadData();
+                alert('Data berhasil dihapus')
+            });
+        }
+
+         $(document).ready(function() {
             
           
             loadData();
 
-            $("#dtpetugas").dataTable({
+            $("#dtSigna").dataTable({
                 bDestroy: true,
                 data: [],
                 columns: [
                     {
                         "data": "Action", class: "text-center", "render": function (data, type, row) {
-                                return '<a href="#" class="text-primary" onclick="EditRecord(\'' + row.NIKPetugas + '\')"><i class="mdi mdi-lead-pencil"></i></a> &nbsp; | &nbsp; <a href="#" class="text-danger" onclick="DeleteRecord(\'' + row.NIKPetugas + '\')"><i class="mdi mdi-eraser-variant"></i></a>'
+                                return '<a href="#" class="text-primary" onclick="EditRecord(\'' + row.IdSigna + '\')"><i class="mdi mdi-lead-pencil"></i></a> &nbsp; | &nbsp; <a href="#" class="text-danger" onclick="DeleteRecord(\'' + row.IdSigna + '\')"><i class="mdi mdi-eraser-variant"></i></a>'
                         }
-                    },
-                    { "data": "NIKPetugas", "autoWidth": true, class: "text-left" },
-                    { "data": "Nama", "autoWidth": true, class: "text-left" },
-                    { "data": "JenisKelamin", "autoWidth": true, class: "text-left" }, 
-                    { "data": "TglMasukInd", "autoWidth": true, class: "text-center" }
-
+                    }, 
+                    { "data": "Keterangan", "autoWidth": true, class: "text-left" },
+            
                 ],
                 filter: true,
                 info: true,
@@ -158,46 +143,24 @@
          
             $("#btnInput").click(function(){
                 
-                $('#txtNIKPetugas').val('ss');
-                $('#txtNama').val('ssz');
-                $('#selJenisKelamin').val('Laki-Laki');
-                $('#txtpetugasS').val('dss');
-                $('#txtTglMasuk').val('06/11/2023'); 
+                $('#txtKeterangan').val('ssz');
                 $('#btnSave').focus(); 
             });
             
             $("#btnAdd").click(function(){
                 clearData(); 
-                $("#titelModal").html('Add Petugas');
+                $("#titelModal").html('Add Signa');
                 $("#btnSave").show();
                 $("#btnUpdate").hide();
              });
 
             function validasi(){
-               if($('#txtNIKPetugas').val() == ''){
-                    alert('NIKPetugas harus diisi');
-                    $('#txtNIKPetugas').focus();
+               
+                if($('#txtKeterangan').val() == ''){
+                    alert('Keterangan harus diisi');
+                    $('#txtKeterangan').focus();
                     return; 
                 }
- 
-                if($('#txtNama').val() == ''){
-                    alert('Nama harus diisi');
-                    $('#txtNama').focus();
-                    return; 
-                }
-
-                if($('#selJenisKelamin').val() == ''){
-                    alert('Jenis Kelamin harus diisi');
-                    $('#selJenisKelamin').focus();
-                    return; 
-                }
-                 
-                if($('#txtTglMasuk').val() == ''){
-                    alert('Tgl Masuk harus diisi');
-                    $('#txtTglMasuk').focus();
-                    return; 
-                }
- 
             }
 
             $("#btnSave").click(function(e){
@@ -205,21 +168,18 @@
                 validasi();
                 
                 var model = new Object();
-                model.nikpetugas = $('#txtNIKPetugas').val();
-                model.nama = $('#txtNama').val();
-                model.jeniskelamin = $('#selJenisKelamin').val(); 
-                model.tglmasuk = $('#txtTglMasuk').val(); 
- 
+                model.keterangan = $('#txtKeterangan').val();
+                
                 $.ajax({
                     type: "POST",
-                    url: url + "page/admin/process/insertpetugas.php",
+                    url: url + "page/admin/process/insertsigna.php",
                     data: model, 
                     dataType: "json", 
                     success: function (message) {
                         debugger;
                         if (message != "success") {
                             alert(message);
-                            $('#txtNIKPetugas').focus()
+                            $('#txtKeterangan').focus()
                         }
                         else {
                             loadData();
@@ -243,14 +203,12 @@
                 validasi();
                 
                 var model = new Object();
-                model.nikpetugas = $('#txtNIKPetugas').val();
-                model.nama = $('#txtNama').val();
-                model.jeniskelamin = $('#selJenisKelamin').val(); 
-                model.tglmasuk = $('#txtTglMasuk').val(); 
+                model.idsigna = $('#txtIdSigna').val();
+                model.keterangan = $('#txtKeterangan').val();
  
                 $.ajax({
                     type: "POST",
-                    url: url + "page/admin/process/updatepetugas.php",
+                    url: url + "page/admin/process/updatesigna.php",
                     data: model, 
                     dataType: "json", 
                     success: function (message) {
@@ -284,45 +242,28 @@
         }
 
         function clearData(){ 
-            $('#txtNIKPetugas').val('').prop('readonly', false);
-            $('#txtNama').val('');
-            $('#selJenisKelamin').val(''); 
-            $('#txtTglMasuk').val('');
+            $('#txtKeterangan').val(''); 
         }
 
-        function DeleteRecord(nikpetugas){
-            $.ajax({
-                dataType: 'json',
-                type:'POST',
-                url: url + "page/admin/process/deletepetugas.php", 
-                data:{nikpetugas:nikpetugas}
-            }).done(function(data){
-                loadData();
-                alert('Data berhasil dihapus')
-            });
-        }
 
-        function EditRecord(nikpetugas) {
+        function EditRecord(idsigna) {
             resetForm();  
             clearData(); 
-            $("#titelModal").html('Edit Petugas');
+            $("#titelModal").html('Edit Signa');
             $("#btnSave").hide();
             $("#btnUpdate").show();
             $("#myModal").modal();
             $.ajax({
                     type: "GET",
-                    url: url + "page/admin/process/readpetugas.php",
+                    url: url + "page/admin/process/readsigna.php",
                     cache: false,
-                    data: ({ nikpetugas: nikpetugas }),
+                    data: ({ idsigna: idsigna }),
                     success: function (data) {
                     
                         var obj =  data.data[0];  
         
-                        $("#txtNIKPetugas").val(obj.NIKPetugas).prop('readonly', true);
-                        $("#txtNama").val(obj.Nama); 
-                        $("#selJenisKelamin").val(obj.JenisKelamin);  
-                        $("#txtpetugasS").val(obj.petugasSpesialis);
-                        $("#txtTglMasuk").val(obj.TglMasukInd);                         
+                        $("#txtIdSigna").val(obj.IdSigna);                   
+                        $("#txtKeterangan").val(obj.Keterangan);                   
                       
                     },
                     error: function (xhr){

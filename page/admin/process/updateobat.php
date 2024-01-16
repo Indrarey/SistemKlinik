@@ -2,7 +2,8 @@
 header("Content-type:application/json");
 require '../../../config/koneksi.php';
 
-$sql = "UPDATE obat SET namaobat = '" . $_POST['namaobat'] . "' WHERE kodeobat = '" . $_POST['kodeobat'] . "'";
+$sql = "UPDATE obat SET namaobat = '" . $_POST['namaobat'] . "', idsigna = '". $_POST['kodesigna'] ."', 
+        KodeSupplier = '". $_POST['kodesupplier'] ."', HargaSatuan = '". $_POST['hargasatuan'] ."' WHERE kodeobat = '" . $_POST['kodeobat'] . "'";
 // $result = $mysqli->query($sql); 
 if (!$mysqli -> query($sql)){
     $data = "Error description: " . $mysqli -> error;

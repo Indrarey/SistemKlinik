@@ -8,16 +8,34 @@ switch($page){
         include "page/admin/pasien.php";
     break;
     case "obat":
-        include "page/admin/    obat.php";
+        include "page/admin/obat.php";
     break;
     case "petugas":
         include "page/admin/petugas.php";
+    break; 
+    case "supplier":
+        include "page/admin/supplier.php";
+    break;
+    case "signa":
+        include "page/admin/signa.php";
+    break;    
+    case "tindakan":
+        include "page/admin/tindakan.php";
+    break;    
+    case "user":
+        include "page/admin/user.php";
     break;
     case "pendaftaran":
         include "page/petugas/pendaftaran.php";
-    break;
+    break;      
+    case "kunjunganpasien":
+        include "page/dokter/kunjunganpasien.php";
+    break;  
+    case "pembayaran":
+        include "page/petugas/pembayaran.php";
+    break;   
     default:
-        include "php";
+        include "dashboard.php";
     break;
 }
 ?>

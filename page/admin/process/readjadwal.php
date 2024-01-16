@@ -4,13 +4,13 @@ require '../../../config/koneksi.php';
 
 if($_GET['nik'] != '')
 {
-    $whereData = "nik = '". $_GET['nik'] ."'";
+    $whereData = "nikdokter = '". $_GET['nik'] ."'";
 }else
 {
     $whereData = "kodejadwal = '". $_GET['kodejadwal'] ."'";
 }
 
-$sql = "SELECT KodeJadwal, Hari, Jam, Ruangan FROM jadwal where ". $whereData ."";
+$sql = "SELECT KodeJadwal, Hari, Jam FROM jadwal where ". $whereData ."";
 // var_dump($sql);
 $result = $mysqli->query($sql);
 while ($row = $result->fetch_assoc()) {

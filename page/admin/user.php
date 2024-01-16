@@ -2,18 +2,18 @@
         <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Data Petugas</h4>
+                  <h4 class="card-title">Data User</h4>
                   <a href="#" id="btnAdd" data-toggle="modal" data-target="#myModal"  class="btn btn-primary btn-sm">Add</a>
 
                   <!-- <div class="table-responsive"> -->
-                    <table id="dtpetugas" style="width:100%" class="table table-striped">
+                    <table id="dtUser" style="width:100%" class="table table-striped">
                       <thead>
                         <tr>
                           <th>Action</th>
-                          <th>NIK</th>
-                          <th>Nama</th>
-                          <th>Jenis Kelamin</th> 
-                          <th>Tgl Masuk</th>
+                          <th>Kode User</th>
+                          <th>Nama User</th> 
+                          <th>No Identitas</th> 
+                          <th>Jabatan</th> 
                         </tr>
                       </thead>
                       <tbody></tbody>
@@ -36,27 +36,25 @@
                         <form class="forms-sample" id="formInput">
                             <div class="card">
                                 <div class="card-body">
-                                <button type="button" class="btn btn-primary btn-sm" id="btnInput">Input</button>
+                                <!-- <button type="button" class="btn btn-primary btn-sm" id="btnInput">Input</button> -->
 
                                     <div class="form-group">
-                                        <label for="txtNIKPetugas">NIK</label>
-                                        <input type="text" required class="form-control" id="txtNIKPetugas" name="txtNIKPetugas" placeholder="NIK Petugas" maxlength="20">
+                                        <label for="txtKodeUser">Kode User</label>
+                                        <input type="text" required class="form-control" id="txtKodeUser" name="txtKodeUser" placeholder="Kode User" maxlength="10">
                                     </div>
                                     <div class="form-group">
-                                        <label for="txtNama">Nama</label>
-                                        <input type="text" required class="form-control" id="txtNama"  name="txtNama"  placeholder="Nama Lengkap" maxlength="70">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="selJenisKelamin">Jenis Kelamin</label>
-                                        <select class="form-control" required  name="selJenisKelamin" id="selJenisKelamin">
-                                            <option value="">Pilih</option>
-                                            <option value="Laki-Laki">Laki-Laki</option>
-                                            <option value="Perempuan">Perempuan</option>
+                                        <label for="selNamaUser">Nama User</label>
+                                        <select class="form-control" required  name="selNamaUser" id="selNamaUser">
+                                            <option value="">Pilih</option>  
                                         </select>
-                                    </div>
+                                    </div>                                    
                                     <div class="form-group">
-                                    <label for="txtTglMasuk">Tgl Masuk</label>
-                                        <input type="text" required  class="form-control" id="txtTglMasuk" name="txtTglMasuk" placeholder="Tgl Masuk" maxlength="10">
+                                        <label for="txtPassword">Password</label>
+                                        <input type="password" required class="form-control" id="txtPassword"  name="txtPassword"  placeholder="*******" maxlength="70">
+                                    </div>                                  
+                                    <div class="form-group">
+                                        <label for="txtJabatan">Jabatan</label>
+                                        <input type="text" readonly class="form-control" id="txtJabatan" name="txtJabatan" placeholder="Jabatan" >
                                     </div>
                                     <div class="form-group text-right">
                                         <button type="submit" class="btn btn-primary btn-sm" id="btnSave">Save</button>
@@ -99,21 +97,18 @@
             margin-bottom: 3px;
         }
     </style>
-    <script>
-        $('#txtTglMasuk').datepicker({
-            dateFormat: 'dd/mm/yy'
-        });
+    <script> 
     
         var url = "<?= $baseUrl ?>";
       
         function loadData() {
                  $.ajax({
-                    url: url + "page/admin/process/readpetugas.php",
+                    url: url + "page/admin/process/readuser.php",
                     dataType: "json",
-                    data:{nikpetugas:''}
+                    data:{kodeuser:''}
                 }).done(function (result) {
-                    $("#dtpetugas").DataTable().clear();
-                    $("#dtpetugas").DataTable().rows.add(result.data).draw(false);
+                    $("#dtUser").DataTable().clear();
+                    $("#dtUser").DataTable().rows.add(result.data).draw(false);
                  
                 }).fail(function (jqXHR, textStatus, errorThrown) { 
                     // needs to implement if it fails
@@ -122,22 +117,23 @@
             }
         $(document).ready(function() {
             
-          
+            
+            
             loadData();
 
-            $("#dtpetugas").dataTable({
+            $("#dtUser").dataTable({
                 bDestroy: true,
                 data: [],
                 columns: [
                     {
                         "data": "Action", class: "text-center", "render": function (data, type, row) {
-                                return '<a href="#" class="text-primary" onclick="EditRecord(\'' + row.NIKPetugas + '\')"><i class="mdi mdi-lead-pencil"></i></a> &nbsp; | &nbsp; <a href="#" class="text-danger" onclick="DeleteRecord(\'' + row.NIKPetugas + '\')"><i class="mdi mdi-eraser-variant"></i></a>'
+                                return '<a href="#" class="text-primary" onclick="EditRecord(\'' + row.KodeUser + '\')"><i class="mdi mdi-lead-pencil"></i></a> &nbsp; | &nbsp; <a href="#" class="text-danger" onclick="DeleteRecord(\'' + row.KodeUser + '\')"><i class="mdi mdi-eraser-variant"></i></a>'
                         }
                     },
-                    { "data": "NIKPetugas", "autoWidth": true, class: "text-left" },
-                    { "data": "Nama", "autoWidth": true, class: "text-left" },
-                    { "data": "JenisKelamin", "autoWidth": true, class: "text-left" }, 
-                    { "data": "TglMasukInd", "autoWidth": true, class: "text-center" }
+                    { "data": "KodeUser", "autoWidth": true, class: "text-left" },
+                    { "data": "NamaUser", "autoWidth": true, class: "text-left" },
+                    { "data": "NoIdentitas", "autoWidth": true, class: "text-left" },
+                    { "data": "Jabatan", "autoWidth": true, class: "text-left" },
 
                 ],
                 filter: true,
@@ -155,49 +151,27 @@
                 autoWidth: true,
             });
 
-         
-            $("#btnInput").click(function(){
-                
-                $('#txtNIKPetugas').val('ss');
-                $('#txtNama').val('ssz');
-                $('#selJenisKelamin').val('Laki-Laki');
-                $('#txtpetugasS').val('dss');
-                $('#txtTglMasuk').val('06/11/2023'); 
-                $('#btnSave').focus(); 
-            });
-            
-            $("#btnAdd").click(function(){
-                clearData(); 
-                $("#titelModal").html('Add Petugas');
-                $("#btnSave").show();
-                $("#btnUpdate").hide();
-             });
+   
 
             function validasi(){
-               if($('#txtNIKPetugas').val() == ''){
-                    alert('NIKPetugas harus diisi');
-                    $('#txtNIKPetugas').focus();
+               if($('#txtKodeUser').val() == ''){
+                    alert('Kode User harus diisi');
+                    $('#txtKodeUser').focus();
                     return; 
                 }
  
-                if($('#txtNama').val() == ''){
-                    alert('Nama harus diisi');
-                    $('#txtNama').focus();
+                if($('#selNamaUser').val() == ''){
+                    alert('Nama User harus diisi');
+                    $('#selNamaUser').focus();
                     return; 
                 }
 
-                if($('#selJenisKelamin').val() == ''){
-                    alert('Jenis Kelamin harus diisi');
-                    $('#selJenisKelamin').focus();
+                if($('#txtPassword').val() == ''){
+                    alert('Password harus diisi');
+                    $('#txtPassword').focus();
                     return; 
                 }
                  
-                if($('#txtTglMasuk').val() == ''){
-                    alert('Tgl Masuk harus diisi');
-                    $('#txtTglMasuk').focus();
-                    return; 
-                }
- 
             }
 
             $("#btnSave").click(function(e){
@@ -205,21 +179,21 @@
                 validasi();
                 
                 var model = new Object();
-                model.nikpetugas = $('#txtNIKPetugas').val();
-                model.nama = $('#txtNama').val();
-                model.jeniskelamin = $('#selJenisKelamin').val(); 
-                model.tglmasuk = $('#txtTglMasuk').val(); 
+                model.kodeuser = $('#txtKodeUser').val();
+                model.namauser = $('#selNamaUser').val(); 
+                model.password = $('#txtPassword').val();  
+                model.jabatan = $('#txtJabatan').val();  
  
                 $.ajax({
                     type: "POST",
-                    url: url + "page/admin/process/insertpetugas.php",
+                    url: url + "page/admin/process/insertuser.php",
                     data: model, 
                     dataType: "json", 
                     success: function (message) {
                         debugger;
                         if (message != "success") {
                             alert(message);
-                            $('#txtNIKPetugas').focus()
+                            $('#txtKodeUser').focus()
                         }
                         else {
                             loadData();
@@ -243,14 +217,14 @@
                 validasi();
                 
                 var model = new Object();
-                model.nikpetugas = $('#txtNIKPetugas').val();
-                model.nama = $('#txtNama').val();
-                model.jeniskelamin = $('#selJenisKelamin').val(); 
-                model.tglmasuk = $('#txtTglMasuk').val(); 
+                model.kodeuser = $('#txtKodeUser').val();
+                model.namauser = $('#selNamaUser').val(); 
+                model.password = $('#txtPassword').val(); 
+                model.jabatan = $('#txtJabatan').val(); 
  
                 $.ajax({
                     type: "POST",
-                    url: url + "page/admin/process/updatepetugas.php",
+                    url: url + "page/admin/process/updateuser.php",
                     data: model, 
                     dataType: "json", 
                     success: function (message) {
@@ -274,7 +248,90 @@
 
               
             });
+
+            $("#selNamaUser").change(function (e){
+                $.ajax({
+                    type: "GET",
+                    url: url + "page/admin/process/readnamauser.php",
+                    datatype: 'json',
+                    data:{kodeuser:$(this).val()},
+                    success: function (data) {
+                        
+                        var obj =  data.data[0];  
+
+                        $("#txtJabatan").val(obj.Jabatan);
+                    },
+                    error: function (ex) {
+                        alert('Failed Nama User');
+                    }
+                });
+            });
+
+
         });
+
+                 
+        $("#btnAdd").click(function(){
+                clearData(); 
+                PopulateNamaUser(); 
+                $("#titelModal").html('Add User');
+                $("#btnSave").show();
+                $("#btnUpdate").hide();
+             });
+
+        function PopulateNamaUser() {
+                 $.ajax({
+                    type: "GET",
+                    url: url + "page/admin/process/readnamauser.php",
+                    datatype: 'json',
+                    data:{kodeuser:''},
+                    success: function (data) {
+                        $('#selNamaUser').empty(); 
+                        $("#selNamaUser").append('<option value="" selected>Fill Selected</option>');
+                        $.each(data, function (i, bind) {
+                            debugger
+                            for(var x = 0; x < bind.length; x++){
+                                $("#selNamaUser").append('<option value="' + bind[x].KodeUser + '">' + bind[x].NamaUser + '</option>');
+                            }
+                        }); 
+                    },
+                    error: function (ex) {
+                        alert('Failed Nama User');
+                    }
+                });
+            }
+           
+
+
+        function EditRecord(kodeuser) {
+            resetForm();  
+            clearData(); 
+            PopulateNamaUser();
+            $("#titelModal").html('Edit User');
+            $("#btnSave").hide();
+            $("#btnUpdate").show();
+            $("#myModal").modal();
+            $.ajax({
+                    type: "GET",
+                    url: url + "page/admin/process/readuser.php",
+                    cache: false,
+                    data: ({ kodeuser: kodeuser }),
+                    success: function (data) {
+                    
+                        var obj =  data.data[0];  
+        
+                        $("#txtKodeUser").val(obj.KodeUser).prop('readonly', true);
+                        $("#selNamaUser").find('option[value="' + obj.NoIdentitas + '"]').prop('selected', 'selected');                       
+                        // $("#txtPassword").val(obj.Password);                       
+                        $("#txtJabatan").val(obj.Jabatan);                       
+                      
+                    },
+                    error: function (xhr){
+                        console.log(xhr.responseText)
+                    }
+                })
+
+        }
                 
         function resetForm() {
             var $form = $('#formInput');
@@ -284,53 +341,25 @@
         }
 
         function clearData(){ 
-            $('#txtNIKPetugas').val('').prop('readonly', false);
-            $('#txtNama').val('');
-            $('#selJenisKelamin').val(''); 
-            $('#txtTglMasuk').val('');
+            $('#txtKodeUser').val('').prop('readonly', false);
+            $('#selNamaUser').val('');
+            $('#txtPassword').val('');
+            $('#txtJabatan').val('');
         }
 
-        function DeleteRecord(nikpetugas){
+        function DeleteRecord(kodeuser){
             $.ajax({
                 dataType: 'json',
                 type:'POST',
-                url: url + "page/admin/process/deletepetugas.php", 
-                data:{nikpetugas:nikpetugas}
+                url: url + "page/admin/process/deleteuser.php", 
+                data:{kodeuser:kodeuser}
             }).done(function(data){
                 loadData();
                 alert('Data berhasil dihapus')
             });
         }
 
-        function EditRecord(nikpetugas) {
-            resetForm();  
-            clearData(); 
-            $("#titelModal").html('Edit Petugas');
-            $("#btnSave").hide();
-            $("#btnUpdate").show();
-            $("#myModal").modal();
-            $.ajax({
-                    type: "GET",
-                    url: url + "page/admin/process/readpetugas.php",
-                    cache: false,
-                    data: ({ nikpetugas: nikpetugas }),
-                    success: function (data) {
-                    
-                        var obj =  data.data[0];  
         
-                        $("#txtNIKPetugas").val(obj.NIKPetugas).prop('readonly', true);
-                        $("#txtNama").val(obj.Nama); 
-                        $("#selJenisKelamin").val(obj.JenisKelamin);  
-                        $("#txtpetugasS").val(obj.petugasSpesialis);
-                        $("#txtTglMasuk").val(obj.TglMasukInd);                         
-                      
-                    },
-                    error: function (xhr){
-                        console.log(xhr.responseText)
-                    }
-                })
-
-        }
 
 
     </script>

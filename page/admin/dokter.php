@@ -105,7 +105,6 @@
                                             <th width="20%">Kode Jadwal</th> 
                                             <th width="20%">Hari</th>
                                             <th width="20%">Jam</th>
-                                            <th width="20%">Ruangan</th> 
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -122,8 +121,7 @@
                                 <form class="forms-sample" id="formInputJadwal">
                                     <button type="button" class="btn btn-primary btn-sm" id="btnInputJadwal">Input</button>
                                     <div class="form-group">
-                                        <label for="txtKodeJadwal">Kode Jadwal</label>
-                                        <input type="text" required  class="form-control" id="txtKodeJadwal" name="txtKodeJadwal" placeholder="Kode Jadwal" maxlength="10">
+                                         <input type="hidden" required  class="form-control" id="txtKodeJadwal" name="txtKodeJadwal" placeholder="Kode Jadwal" maxlength="10">
                                     </div>
                                     <div class="form-group">
                                         <label for="selHari">Hari</label>
@@ -141,10 +139,6 @@
                                     <div class="form-group">
                                         <label for="txtJam">Jam</label>
                                         <input type="time" required class="form-control" id="txtJam"  name="txtJam">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="txtRuangan">Ruangan</label>
-                                        <input type="text" required  class="form-control" id="txtRuangan" name="txtRuangan" placeholder="Ruangan" maxlength="10">
                                     </div>
                                     <div class="form-group text-right">
                                         <button type="submit" class="btn btn-primary btn-sm" id="btnSaveJadwal">Save</button>
@@ -217,18 +211,18 @@
                 columns: [
                     {
                         "data": "Action", class: "text-center", "render": function (data, type, row) {
-                                return '<a href="#" class="text-primary" onclick="EditRecord(\'' + row.NIK + '\')"><i class="mdi mdi-lead-pencil"></i></a> &nbsp; | &nbsp; <a href="#" class="text-danger" onclick="DeleteRecord(\'' + row.NIK + '\')"><i class="mdi mdi-eraser-variant"></i></a>'
+                                return '<a href="#" class="text-primary" onclick="EditRecord(\'' + row.NIKDokter + '\')"><i class="mdi mdi-lead-pencil"></i></a> &nbsp; | &nbsp; <a href="#" class="text-danger" onclick="DeleteRecord(\'' + row.NIKDokter + '\')"><i class="mdi mdi-eraser-variant"></i></a>'
                         }
                     },
                     {
                         "data": "Jadwal", class: "text-center", "render": function (data, type, row) {
-                                return '<button class="btn-sm btn-primary" onclick="ViewJadwal(\'' + row.NIK + '\')">Lihat Jadwal</button> &nbsp;'
+                                return '<button class="btn-sm btn-primary" onclick="ViewJadwal(\'' + row.NIKDokter + '\')">Lihat Jadwal</button> &nbsp;'
                         }
                     },
-                    { "data": "NIK", "autoWidth": true, class: "text-left" },
+                    { "data": "NIKDokter", "autoWidth": true, class: "text-left" },
                     { "data": "Nama", "autoWidth": true, class: "text-left" },
                     { "data": "JenisKelamin", "autoWidth": true, class: "text-left" },
-                    { "data": "DokterSpesialis", "autoWidth": true, class: "text-left" },
+                    { "data": "Spesialisasi", "autoWidth": true, class: "text-left" },
                     { "data": "TglMasuk", "autoWidth": true, class: "text-center" }
 
                 ],
@@ -387,7 +381,6 @@
                     { "data": "KodeJadwal", "autoWidth": true, class: "text-left" },
                     { "data": "Hari", "autoWidth": true, class: "text-center" },
                     { "data": "Jam", "autoWidth": true, class: "text-center" },
-                    { "data": "Ruangan", "autoWidth": true, class: "text-center" }
 
                 ],
                 filter: true,
@@ -426,10 +419,8 @@
                 
                 var model = new Object();
                 model.nik = $('#txtNIKJadwal').val();
-                model.kodejadwal = $('#txtKodeJadwal').val();
                 model.hari = $('#selHari').val();
-                model.jam = $('#txtJam').val();
-                model.ruangan = $('#txtRuangan').val();
+                model.jam = $('#txtJam').val(); 
  
                 $.ajax({
                     type: "POST",
@@ -467,7 +458,6 @@
                 model.kodejadwal = $('#txtKodeJadwal').val();
                 model.hari = $('#selHari').val();
                 model.jam = $('#txtJam').val();
-                model.ruangan = $('#txtRuangan').val();
  
                 $.ajax({
                     type: "POST",
@@ -496,12 +486,6 @@
             });
 
             function validasiJadwal(){
-                if($('#txtKodeJadwal').val() == ''){
-                    alert('Kode Jadwal harus diisi');
-                    $('#txtKodeJadwal').focus();
-                    return; 
-                }
-
                if($('#selHari').val() == ''){
                     alert('Hari harus diisi');
                     $('#selHari').focus();
@@ -514,11 +498,7 @@
                     return; 
                 }
                 
-                if($('#txtRuangan').val() == ''){
-                    alert('Ruangan harus diisi');
-                    $('#txtRuangan').focus();
-                    return; 
-                }
+            
  
             }
  
@@ -567,10 +547,10 @@
                     
                         var obj =  data.data[0];  
         
-                        $("#txtNIK").val(obj.NIK).prop('readonly', true);
+                        $("#txtNIK").val(obj.NIKDokter).prop('readonly', true);
                         $("#txtNama").val(obj.Nama);
                         $("#selJenisKelamin").val(obj.JenisKelamin);
-                        $("#txtDokterS").val(obj.DokterSpesialis);
+                        $("#txtDokterS").val(obj.Spesialisasi);
                         $("#txtTglMasuk").val(obj.TglMasuk);                         
                       
                     },
@@ -600,7 +580,6 @@
                         $("#txtKodeJadwal").val(obj.KodeJadwal).prop('readonly', true);
                         $("#selHari").val(obj.Hari);
                         $("#txtJam").val(obj.Jam);
-                        $("#txtRuangan").val(obj.Ruangan);
                       
                     },
                     error: function (xhr){
@@ -636,10 +615,9 @@
            
 
             function clearDataJadwal(){ 
-                $('#txtKodeJadwal').val('').prop('readonly', false);
+                $('#txtKodeJadwal').val('');
                 $('#selHari').val('');
                 $('#txtJam').val('');
-                $('#txtRuangan').val('');
             }
             
             function DeleteRecordJadwal(kodejadwal){

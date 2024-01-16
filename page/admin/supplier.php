@@ -2,18 +2,16 @@
         <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Data Petugas</h4>
+                  <h4 class="card-title">Data Supplier</h4>
                   <a href="#" id="btnAdd" data-toggle="modal" data-target="#myModal"  class="btn btn-primary btn-sm">Add</a>
 
                   <!-- <div class="table-responsive"> -->
-                    <table id="dtpetugas" style="width:100%" class="table table-striped">
+                    <table id="dtSupplier" style="width:100%" class="table table-striped">
                       <thead>
                         <tr>
                           <th>Action</th>
-                          <th>NIK</th>
-                          <th>Nama</th>
-                          <th>Jenis Kelamin</th> 
-                          <th>Tgl Masuk</th>
+                          <th>Kode Supplier</th>
+                          <th>Nama Supplier</th> 
                         </tr>
                       </thead>
                       <tbody></tbody>
@@ -39,27 +37,15 @@
                                 <button type="button" class="btn btn-primary btn-sm" id="btnInput">Input</button>
 
                                     <div class="form-group">
-                                        <label for="txtNIKPetugas">NIK</label>
-                                        <input type="text" required class="form-control" id="txtNIKPetugas" name="txtNIKPetugas" placeholder="NIK Petugas" maxlength="20">
+                                        <label for="txtKodeSupplier">Kode Supplier</label>
+                                        <input type="text"  class="form-control" id="txtKodeSupplier" name="txtKodeSupplier" placeholder="Kode Supplier" maxlength="20">
                                     </div>
                                     <div class="form-group">
-                                        <label for="txtNama">Nama</label>
-                                        <input type="text" required class="form-control" id="txtNama"  name="txtNama"  placeholder="Nama Lengkap" maxlength="70">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="selJenisKelamin">Jenis Kelamin</label>
-                                        <select class="form-control" required  name="selJenisKelamin" id="selJenisKelamin">
-                                            <option value="">Pilih</option>
-                                            <option value="Laki-Laki">Laki-Laki</option>
-                                            <option value="Perempuan">Perempuan</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                    <label for="txtTglMasuk">Tgl Masuk</label>
-                                        <input type="text" required  class="form-control" id="txtTglMasuk" name="txtTglMasuk" placeholder="Tgl Masuk" maxlength="10">
+                                        <label for="txtNamaSupplier">Nama Supplier</label>
+                                        <input type="text" class="form-control" id="txtNamaSupplier"  name="txtNamaSupplier"  placeholder="Nama Supplier" maxlength="70">
                                     </div>
                                     <div class="form-group text-right">
-                                        <button type="submit" class="btn btn-primary btn-sm" id="btnSave">Save</button>
+                                        <button type="button" class="btn btn-primary btn-sm" id="btnSave">Save</button>
                                         <button type="button" class="btn btn-primary btn-sm" id="btnUpdate">Update</button>
                                         <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
                                     </div>
@@ -99,46 +85,52 @@
             margin-bottom: 3px;
         }
     </style>
-    <script>
-        $('#txtTglMasuk').datepicker({
-            dateFormat: 'dd/mm/yy'
-        });
-    
+    <script>    
         var url = "<?= $baseUrl ?>";
       
         function loadData() {
                  $.ajax({
-                    url: url + "page/admin/process/readpetugas.php",
+                    url: url + "page/admin/process/readsupplier.php",
                     dataType: "json",
-                    data:{nikpetugas:''}
+                    data:{kodesupplier:''}
                 }).done(function (result) {
-                    $("#dtpetugas").DataTable().clear();
-                    $("#dtpetugas").DataTable().rows.add(result.data).draw(false);
+                    $("#dtSupplier").DataTable().clear();
+                    $("#dtSupplier").DataTable().rows.add(result.data).draw(false);
                  
                 }).fail(function (jqXHR, textStatus, errorThrown) { 
                     // needs to implement if it fails
                     console.log(jqXHR);
                 });
             }
+        function DeleteRecord(KodeSupplier){
+            $.ajax({
+                dataType: 'json',
+                type:'POST',
+                url: url + "page/admin/process/deletesupplier.php", 
+                data:{kodesupplier:KodeSupplier}
+            }).done(function(data){
+                loadData();
+                alert('Data berhasil dihapus')
+            });
+        }
+
         $(document).ready(function() {
             
           
             loadData();
 
-            $("#dtpetugas").dataTable({
+            $("#dtSupplier").dataTable({
                 bDestroy: true,
                 data: [],
                 columns: [
                     {
                         "data": "Action", class: "text-center", "render": function (data, type, row) {
-                                return '<a href="#" class="text-primary" onclick="EditRecord(\'' + row.NIKPetugas + '\')"><i class="mdi mdi-lead-pencil"></i></a> &nbsp; | &nbsp; <a href="#" class="text-danger" onclick="DeleteRecord(\'' + row.NIKPetugas + '\')"><i class="mdi mdi-eraser-variant"></i></a>'
+                                return '<a href="#" class="text-primary" onclick="EditRecord(\'' + row.KodeSupplier + '\')"><i class="mdi mdi-lead-pencil"></i></a> &nbsp; | &nbsp; <a href="#" class="text-danger" onclick="DeleteRecord(\'' + row.KodeSupplier + '\')"><i class="mdi mdi-eraser-variant"></i></a>'
                         }
                     },
-                    { "data": "NIKPetugas", "autoWidth": true, class: "text-left" },
-                    { "data": "Nama", "autoWidth": true, class: "text-left" },
-                    { "data": "JenisKelamin", "autoWidth": true, class: "text-left" }, 
-                    { "data": "TglMasukInd", "autoWidth": true, class: "text-center" }
-
+                    { "data": "KodeSupplier", "autoWidth": true, class: "text-left" },
+                    { "data": "NamaSupplier", "autoWidth": true, class: "text-left" },
+            
                 ],
                 filter: true,
                 info: true,
@@ -158,46 +150,31 @@
          
             $("#btnInput").click(function(){
                 
-                $('#txtNIKPetugas').val('ss');
-                $('#txtNama').val('ssz');
-                $('#selJenisKelamin').val('Laki-Laki');
-                $('#txtpetugasS').val('dss');
-                $('#txtTglMasuk').val('06/11/2023'); 
+                $('#txtKodeSupplier').val('ss');
+                $('#txtNamaSupplier').val('ssz');
                 $('#btnSave').focus(); 
             });
             
             $("#btnAdd").click(function(){
                 clearData(); 
-                $("#titelModal").html('Add Petugas');
+                $("#titelModal").html('Add Supplier');
                 $("#btnSave").show();
                 $("#btnUpdate").hide();
              });
 
             function validasi(){
-               if($('#txtNIKPetugas').val() == ''){
-                    alert('NIKPetugas harus diisi');
-                    $('#txtNIKPetugas').focus();
+                debugger;
+                if($('#txtKodeSupplier').val() == ''){
+                    alert('Kode Supplier harus diisi');
+                    $('#txtKodeSupplier').focus();
                     return; 
                 }
  
-                if($('#txtNama').val() == ''){
-                    alert('Nama harus diisi');
-                    $('#txtNama').focus();
+                if($('#txtNamaSupplier').val() == ''){
+                    alert('Nama Supplier harus diisi');
+                    $('#txtNamaSupplier').focus();
                     return; 
                 }
-
-                if($('#selJenisKelamin').val() == ''){
-                    alert('Jenis Kelamin harus diisi');
-                    $('#selJenisKelamin').focus();
-                    return; 
-                }
-                 
-                if($('#txtTglMasuk').val() == ''){
-                    alert('Tgl Masuk harus diisi');
-                    $('#txtTglMasuk').focus();
-                    return; 
-                }
- 
             }
 
             $("#btnSave").click(function(e){
@@ -205,21 +182,19 @@
                 validasi();
                 
                 var model = new Object();
-                model.nikpetugas = $('#txtNIKPetugas').val();
-                model.nama = $('#txtNama').val();
-                model.jeniskelamin = $('#selJenisKelamin').val(); 
-                model.tglmasuk = $('#txtTglMasuk').val(); 
- 
+                model.kodesupplier = $('#txtKodeSupplier').val();
+                model.namasupplier = $('#txtNamaSupplier').val();
+                
                 $.ajax({
                     type: "POST",
-                    url: url + "page/admin/process/insertpetugas.php",
+                    url: url + "page/admin/process/insertsupplier.php",
                     data: model, 
                     dataType: "json", 
                     success: function (message) {
                         debugger;
                         if (message != "success") {
                             alert(message);
-                            $('#txtNIKPetugas').focus()
+                            $('#txtKodeSupplier').focus()
                         }
                         else {
                             loadData();
@@ -243,14 +218,12 @@
                 validasi();
                 
                 var model = new Object();
-                model.nikpetugas = $('#txtNIKPetugas').val();
-                model.nama = $('#txtNama').val();
-                model.jeniskelamin = $('#selJenisKelamin').val(); 
-                model.tglmasuk = $('#txtTglMasuk').val(); 
+                model.kodesupplier = $('#txtKodeSupplier').val();
+                model.namasupplier = $('#txtNamaSupplier').val();
  
                 $.ajax({
                     type: "POST",
-                    url: url + "page/admin/process/updatepetugas.php",
+                    url: url + "page/admin/process/updatesupplier.php",
                     data: model, 
                     dataType: "json", 
                     success: function (message) {
@@ -284,45 +257,29 @@
         }
 
         function clearData(){ 
-            $('#txtNIKPetugas').val('').prop('readonly', false);
-            $('#txtNama').val('');
-            $('#selJenisKelamin').val(''); 
-            $('#txtTglMasuk').val('');
+            $('#txtKodeSupplier').val('').prop('readonly', false);
+            $('#txtNamaSupplier').val(''); 
         }
 
-        function DeleteRecord(nikpetugas){
-            $.ajax({
-                dataType: 'json',
-                type:'POST',
-                url: url + "page/admin/process/deletepetugas.php", 
-                data:{nikpetugas:nikpetugas}
-            }).done(function(data){
-                loadData();
-                alert('Data berhasil dihapus')
-            });
-        }
-
-        function EditRecord(nikpetugas) {
+        
+        function EditRecord(KodeSupplier) {
             resetForm();  
             clearData(); 
-            $("#titelModal").html('Edit Petugas');
+            $("#titelModal").html('Edit Supplier');
             $("#btnSave").hide();
             $("#btnUpdate").show();
             $("#myModal").modal();
             $.ajax({
                     type: "GET",
-                    url: url + "page/admin/process/readpetugas.php",
+                    url: url + "page/admin/process/readsupplier.php",
                     cache: false,
-                    data: ({ nikpetugas: nikpetugas }),
+                    data: ({ kodesupplier: KodeSupplier }),
                     success: function (data) {
                     
                         var obj =  data.data[0];  
         
-                        $("#txtNIKPetugas").val(obj.NIKPetugas).prop('readonly', true);
-                        $("#txtNama").val(obj.Nama); 
-                        $("#selJenisKelamin").val(obj.JenisKelamin);  
-                        $("#txtpetugasS").val(obj.petugasSpesialis);
-                        $("#txtTglMasuk").val(obj.TglMasukInd);                         
+                        $("#txtKodeSupplier").val(obj.KodeSupplier).prop('readonly', true);
+                        $("#txtNamaSupplier").val(obj.NamaSupplier);                   
                       
                     },
                     error: function (xhr){

@@ -1,12 +1,12 @@
 <?php
 header("Content-type:application/json");
 require '../../../config/koneksi.php';
-if($_GET['nik'] == '')
+if($_GET['idtindakan'] == '')
 {
-    $sql = "SELECT * FROM dokter Order By nikdokter asc";
+    $sql = "SELECT * FROM tindakan Order By keterangan asc";
 }else{
-    $sql = "SELECT NIKDokter, Nama, JenisKelamin, Spesialisasi, DATE_FORMAT(TglMasuk, '%d/%m/%Y') TglMasuk  FROM dokter where nikdokter = '". $_GET['nik'] ."'";
-}
+    $sql = "SELECT * FROM tindakan where idtindakan = '". $_GET['idtindakan'] ."'";
+} 
 $result = $mysqli->query($sql);
 while ($row = $result->fetch_assoc()) {
     $json[] = $row;
